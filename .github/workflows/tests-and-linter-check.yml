@@ -1,4 +1,4 @@
-name: linter-check
+name: tests-and-linter-check
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  linter-check:
+  tests-and-linter-check:
     runs-on: ubuntu-latest
 
     steps:
