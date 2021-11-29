@@ -27,9 +27,9 @@ jobs:
         run: poetry run pytest
 
       - name: Test & publish code coverage
-        uses: paambaati/codeclimate-action@v2.7.4
+        uses: paambaati/codeclimate-action@v2.7.5
         env:
-          CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          CC_TEST_REPORTER_ID: ac67632c32e62c0b31e6863520c469cc3a8a1487be0b914c527a05a6ddb3ab8d
         with:
           coverageCommand: make test-coverage
           debug: true
