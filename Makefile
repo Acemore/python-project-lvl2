@@ -13,7 +13,10 @@ package-install:
 publish:
 	poetry publish --dry-run
 
+test:
+	poetry run pytest
+
 test-coverage:
 	poetry run pytest --cov=gendiff --cov-report xml
 
-.PHONY: build install lint package-install publish
+.PHONY: build install lint package-install publish test
