@@ -1,3 +1,5 @@
 .venv/
 *.pyc
 dist/
+.coverage
+coverage.xml
