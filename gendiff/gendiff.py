@@ -1,4 +1,5 @@
 import json
+from gendiff.file_type_parser import get_file_content
 
 
 ADDED_PREFIX = '+ '
@@ -17,10 +18,6 @@ def add_substr(substrs, file, key, prefix):
             get_value(file, key)
         )
     )
-
-
-def get_file_content(file_path):
-    return json.load(open(file_path))
 
 
 def get_keys(file):
