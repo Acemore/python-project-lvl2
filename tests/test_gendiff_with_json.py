@@ -14,8 +14,8 @@ def second_json_file_path():
 
 @pytest.fixture
 def expected_string():
-    return open('tests/fixtures/expected_json.txt').read()
+    return open('tests/fixtures/expected_flat.txt').read()
 
 
-def test_generate_diff(first_json_file_path, second_json_file_path, expected_string):
+def test_generate_diff_with_json(first_json_file_path, second_json_file_path, expected_string):
     assert generate_diff(first_json_file_path, second_json_file_path) == expected_string
