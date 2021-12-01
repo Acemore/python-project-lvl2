@@ -5,3 +5,4 @@
 [![Test Coverage](https://api.codeclimate.com/v1/badges/2a039f24560ef7f86867/test_coverage)](https://codeclimate.com/github/Acemore/python-project-lvl2/test_coverage)
 
 [![asciicast](https://asciinema.org/a/79rRaQsLm7QxDacVO5tofXd5U.svg)](https://asciinema.org/a/79rRaQsLm7QxDacVO5tofXd5U)
+[![asciicast](https://asciinema.org/a/7EXWgsso8WkDZbpQr1HYdP82R.svg)](https://asciinema.org/a/7EXWgsso8WkDZbpQr1HYdP82R)
