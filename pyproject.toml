@@ -3,6 +3,11 @@ name = "hexlet-code"
 version = "0.1.0"
 description = ""
 authors = ["Sergey Martynov <acemore@mail.ru>"]
+repository = "https://github.com/Acemore/python-project-lvl2"
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: POSIX :: Linux"
+]
 packages = [
     { include = "gendiff" },
 ]
