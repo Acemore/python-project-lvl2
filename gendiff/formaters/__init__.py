@@ -1,12 +1,11 @@
-from gendiff.formaters.plain import format_plain
-from gendiff.formaters.stylish import format_stylish
-
-
-formaters = {
-    'plain': format_plain,
-    'stylish': format_stylish
-}
-
-
-def select_formater(format):
-    return formaters[format]
+ADDED = "added"
+CHANGED = "changed"
+CHILDREN = "children"
+FIRST_VALUE = "first_value"
+LINE_BREAK = "\n"
+NESTED = "nested"
+REMOVED = "removed"
+SAME = "same"
+SECOND_VALUE = "second_value"
+STATE = "state"
+VALUE = "value"

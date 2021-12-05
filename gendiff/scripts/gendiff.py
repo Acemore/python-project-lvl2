@@ -2,19 +2,27 @@
 
 import argparse
 from gendiff import generate_diff
+from gendiff.gendiff import STYLISH
+
+
+DESCRIPTION = 'Generate diff'
+FIRST_FILE = 'first_file'
+GENDIFF = 'gendiff'
+HELP = 'set format of output'
+SECOND_FILE = 'second_file'
 
 
 def main():
     gendiff_args_parser = argparse.ArgumentParser(
-        prog='gendiff',
-        description='Generate diff'
+        prog=GENDIFF,
+        description=DESCRIPTION
     )
-    gendiff_args_parser.add_argument('first_file')
-    gendiff_args_parser.add_argument('second_file')
+    gendiff_args_parser.add_argument(FIRST_FILE)
+    gendiff_args_parser.add_argument(SECOND_FILE)
     gendiff_args_parser.add_argument(
         '-f', '--format',
-        default='stylish',
-        help='set format of output'
+        default=STYLISH,
+        help=HELP
     )
     gendiff_args = gendiff_args_parser.parse_args()
 

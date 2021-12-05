@@ -1,33 +1,36 @@
 import json
+from gendiff.formaters import (
+    ADDED, CHANGED, CHILDREN, FIRST_VALUE, LINE_BREAK,
+    NESTED, REMOVED, SAME, SECOND_VALUE, STATE, VALUE
+)
 
 
-STATES = {
-    'added': '  + ',
-    'nested': '    ',
-    'removed': '  - ',
-    'same': '    '
-}
+ADDED_ITEM_INDENT = "  + "
+CLOSING_CURLY_BRACKET = "}"
+EMPTY_INDENT = "    "
+OPENING_CURLY_BRACKET = "{"
+REMOVED_ITEMS_INDENT = "  - "
 
 
 def get_dict_str(diff, depth):
     nested_diff = []
-    indent = '    ' * depth
+    indent = EMPTY_INDENT * depth
 
     if type(diff) is dict:
-        nested_diff.append('{')
+        nested_diff.append(OPENING_CURLY_BRACKET)
 
         keys = diff.keys()
         for key in keys:
-            str = (f'{indent}{STATES["same"]}{key}: '
+            str = (f'{indent}{EMPTY_INDENT}{key}: '
                    f'{get_dict_str(diff[key], depth + 1)}')
             nested_diff.append(str)
 
-        nested_diff.append(f'{indent}}}')
+        nested_diff.append(f'{indent}{CLOSING_CURLY_BRACKET}')
     else:
         str = format_value(diff, depth)
         nested_diff.append(str)
 
-    return '\n'.join(nested_diff)
+    return LINE_BREAK.join(nested_diff)
 
 
 def format_value(value, depth):
@@ -39,36 +42,36 @@ def format_value(value, depth):
 
 
 def get_formated_str(diff, depth, indent, status, key):
-    if status == 'added':
-        return (f'{indent}{STATES["added"]}{key}: '
-                f'{format_value(diff[key]["value"], depth)}')
-    elif status == 'removed':
-        return (f'{indent}{STATES["removed"]}{key}: '
-                f'{format_value(diff[key]["value"], depth)}')
-    elif status == 'same':
-        return (f'{indent}{STATES["same"]}{key}: '
-                f'{format_value(diff[key]["value"], depth)}')
-    elif status == 'changed':
-        return (f'{indent}{STATES["removed"]}{key}: '
-                f'{format_value(diff[key]["first_value"], depth)}\n'
-                f'{indent}{STATES["added"]}{key}: '
-                f'{format_value(diff[key]["second_value"], depth)}')
-    elif status == 'nested':
-        return (f'{indent}{STATES["nested"]}{key}: '
-                f'{format_stylish(diff[key]["children"], depth + 1)}')
+    if status == ADDED:
+        return (f'{indent}{ADDED_ITEM_INDENT}{key}: '
+                f'{format_value(diff[key][VALUE], depth)}')
+    elif status == REMOVED:
+        return (f'{indent}{REMOVED_ITEMS_INDENT}{key}: '
+                f'{format_value(diff[key][VALUE], depth)}')
+    elif status == SAME:
+        return (f'{indent}{EMPTY_INDENT}{key}: '
+                f'{format_value(diff[key][VALUE], depth)}')
+    elif status == CHANGED:
+        return (f'{indent}{REMOVED_ITEMS_INDENT}{key}: '
+                f'{format_value(diff[key][FIRST_VALUE], depth)}\n'
+                f'{indent}{ADDED_ITEM_INDENT}{key}: '
+                f'{format_value(diff[key][SECOND_VALUE], depth)}')
+    elif status == NESTED:
+        return (f'{indent}{EMPTY_INDENT}{key}: '
+                f'{format_stylish(diff[key][CHILDREN], depth + 1)}')
 
 
 def format_stylish(diff, depth=0):
-    result = ['{']
-    indent = '    ' * depth
+    result = [OPENING_CURLY_BRACKET]
+    indent = EMPTY_INDENT * depth
 
-    keys = sorted(diff.keys())
+    keys = diff.keys()
     for key in keys:
-        status = diff[key]['state']
+        status = diff[key][STATE]
 
         str = get_formated_str(diff, depth, indent, status, key)
         result.append(str)
 
-    result.append(f'{indent}}}')
+    result.append(f'{indent}{CLOSING_CURLY_BRACKET}')
 
-    return '\n'.join(result)
+    return LINE_BREAK.join(result)

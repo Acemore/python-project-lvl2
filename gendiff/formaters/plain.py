@@ -1,4 +1,12 @@
 import json
+from gendiff.formaters import (
+    ADDED, CHANGED, CHILDREN, FIRST_VALUE, LINE_BREAK,
+    NESTED, REMOVED, SECOND_VALUE, STATE, VALUE
+)
+
+
+COMPLEX_VALUE = "[complex value]"
+DOT = "."
 
 
 def format_value(value):
@@ -8,35 +16,35 @@ def format_value(value):
         return json.dumps(value)
     if type(value) is str:
         return f"'{value}'"
-    return '[complex value]'
+    return COMPLEX_VALUE
 
 
 def get_formated_str(diff, status, key, path):
     path += key
 
-    if status == 'removed':
+    if status == REMOVED:
         return f"Property '{path}' was removed"
-    elif status == 'added':
+    elif status == ADDED:
         return (f"Property '{path}' was added with value: "
-                f"{format_value(diff[key]['value'])}")
-    elif status == 'changed':
+                f"{format_value(diff[key][VALUE])}")
+    elif status == CHANGED:
         return (f"Property '{path}' was updated. "
-                f"From {format_value(diff[key]['first_value'])} "
-                f"to {format_value(diff[key]['second_value'])}")
-    elif status == 'nested':
-        path += '.'
-        return format_plain(diff[key]["children"], path)
+                f"From {format_value(diff[key][FIRST_VALUE])} "
+                f"to {format_value(diff[key][SECOND_VALUE])}")
+    elif status == NESTED:
+        path += DOT
+        return format_plain(diff[key][CHILDREN], path)
 
 
 def format_plain(diff, path=''):
     result = []
 
-    keys = sorted(diff.keys())
+    keys = diff.keys()
     for key in keys:
-        status = diff[key]['state']
+        status = diff[key][STATE]
 
         str = get_formated_str(diff, status, key, path)
         if str:
             result.append(str)
 
-    return '\n'.join(result)
+    return LINE_BREAK.join(result)
