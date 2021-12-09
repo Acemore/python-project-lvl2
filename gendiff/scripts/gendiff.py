@@ -2,7 +2,7 @@
 
 import argparse
 from gendiff import generate_diff
-from gendiff.gendiff import STYLISH
+from gendiff.formaters import STYLISH
 
 
 DESCRIPTION = 'Generate diff'
