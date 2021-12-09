@@ -40,4 +40,4 @@ def test_generate_diff(first_file_path, second_file_path, format, expected_file_
         first_file_path,
         second_file_path,
         format
-     ) == get_expected_string(expected_file_path)
+    ) == get_expected_string(expected_file_path)
