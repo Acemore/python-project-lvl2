@@ -1,12 +1,13 @@
 import json
-from gendiff.formaters import (
-    ADDED, CHANGED, CHILDREN, FIRST_VALUE, LINE_BREAK,
+from gendiff.search_diff import (
+    ADDED, CHANGED, CHILDREN, FIRST_VALUE,
     NESTED, REMOVED, SECOND_VALUE, STATE, VALUE
 )
 
 
 COMPLEX_VALUE = "[complex value]"
 DOT = "."
+LINE_BREAK = "\n"
 
 
 def format_value(value):
