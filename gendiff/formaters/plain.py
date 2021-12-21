@@ -20,21 +20,22 @@ def format_value(value):
     return COMPLEX_VALUE
 
 
-def get_formated_str(diff, status, key, path):
+def get_formated_str(node, key, path):
+    status = node[STATE]
     path += key
 
     if status == REMOVED:
         return f"Property '{path}' was removed"
     elif status == ADDED:
         return (f"Property '{path}' was added with value: "
-                f"{format_value(diff[key][VALUE])}")
+                f"{format_value(node[VALUE])}")
     elif status == CHANGED:
         return (f"Property '{path}' was updated. "
-                f"From {format_value(diff[key][FIRST_VALUE])} "
-                f"to {format_value(diff[key][SECOND_VALUE])}")
+                f"From {format_value(node[FIRST_VALUE])} "
+                f"to {format_value(node[SECOND_VALUE])}")
     elif status == NESTED:
         path += DOT
-        return format_plain(diff[key][CHILDREN], path)
+        return format_plain(node[CHILDREN], path)
 
 
 def format_plain(diff, path=''):
@@ -42,9 +43,9 @@ def format_plain(diff, path=''):
 
     keys = diff.keys()
     for key in keys:
-        status = diff[key][STATE]
+        node = diff[key]
 
-        str = get_formated_str(diff, status, key, path)
+        str = get_formated_str(node, key, path)
         if str:
             result.append(str)
 
