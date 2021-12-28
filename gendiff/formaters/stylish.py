@@ -15,7 +15,7 @@ REMOVED_ITEMS_INDENT = "  - "
 
 def convert_dict_to_str(dict_, depth):
     nested_diff = []
-    indent = EMPTY_INDENT * depth
+    indent = depth * EMPTY_INDENT
 
     if type(dict_) is dict:
         nested_diff.append(OPENING_CURLY_BRACKET)
@@ -42,45 +42,61 @@ def format_value(value, depth):
     return str(value)
 
 
-def get_formated_str(node, depth, indent, key):
+def get_formated_str(node, depth, key):  # noqa: C901
     status = node[STATE]
+    indent = depth * EMPTY_INDENT
+    result = []
 
     if status == ADDED:
         value = node[VALUE]
-        return (f'{indent}{ADDED_ITEM_INDENT}{key}: '
-                f'{format_value(value, depth)}')
+        result.append(
+            (f'{indent}{ADDED_ITEM_INDENT}{key}: '
+             f'{format_value(value, depth)}')
+        )
     elif status == REMOVED:
         value = node[VALUE]
-        return (f'{indent}{REMOVED_ITEMS_INDENT}{key}: '
-                f'{format_value(value, depth)}')
+        result.append(
+            (f'{indent}{REMOVED_ITEMS_INDENT}{key}: '
+             f'{format_value(value, depth)}')
+        )
     elif status == SAME:
         value = node[VALUE]
-        return (f'{indent}{EMPTY_INDENT}{key}: '
-                f'{format_value(value, depth)}')
+        result.append(
+            (f'{indent}{EMPTY_INDENT}{key}: '
+             f'{format_value(value, depth)}')
+        )
     elif status == CHANGED:
         first_value = node[FIRST_VALUE]
         second_value = node[SECOND_VALUE]
-        return (f'{indent}{REMOVED_ITEMS_INDENT}{key}: '
-                f'{format_value(first_value, depth)}\n'
-                f'{indent}{ADDED_ITEM_INDENT}{key}: '
-                f'{format_value(second_value, depth)}')
+
+        result.append(
+            (f'{indent}{REMOVED_ITEMS_INDENT}{key}: '
+             f'{format_value(first_value, depth)}\n'
+             f'{indent}{ADDED_ITEM_INDENT}{key}: '
+             f'{format_value(second_value, depth)}')
+        )
     elif status == NESTED:
         children = node[CHILDREN]
-        return (f'{indent}{EMPTY_INDENT}{key}: '
-                f'{format_stylish(children, depth + 1)}')
+        nested_indent = (depth + 1) * EMPTY_INDENT
+
+        result.append(f'{nested_indent}{key}: {OPENING_CURLY_BRACKET}')
+        for key, value in children.items():
+            result.append(get_formated_str(value, depth + 1, key))
+        result.append(f'{nested_indent}{CLOSING_CURLY_BRACKET}')
+
+    return LINE_BREAK.join(result)
 
 
-def format_stylish(diff, depth=0):
+def format_stylish(diff):
     result = [OPENING_CURLY_BRACKET]
-    indent = EMPTY_INDENT * depth
 
     keys = diff.keys()
     for key in keys:
         node = diff[key]
+        depth = 0
 
-        str = get_formated_str(node, depth, indent, key)
-        result.append(str)
+        result.append(get_formated_str(node, depth, key))
 
-    result.append(f'{indent}{CLOSING_CURLY_BRACKET}')
+    result.append(f'{CLOSING_CURLY_BRACKET}')
 
     return LINE_BREAK.join(result)

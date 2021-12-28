@@ -23,30 +23,48 @@ def format_value(value):
 def get_formated_str(node, key, path):
     status = node[STATE]
     path += key
+    result = []
 
     if status == REMOVED:
-        return f"Property '{path}' was removed"
+        result.append(
+            f"Property '{path}' was removed"
+        )
     elif status == ADDED:
-        return (f"Property '{path}' was added with value: "
-                f"{format_value(node[VALUE])}")
+        value = node[VALUE]
+
+        result.append(
+            (f"Property '{path}' was added with value: "
+                f"{format_value(value)}")
+        )
     elif status == CHANGED:
-        return (f"Property '{path}' was updated. "
-                f"From {format_value(node[FIRST_VALUE])} "
-                f"to {format_value(node[SECOND_VALUE])}")
+        first_value = node[FIRST_VALUE]
+        second_value = node[SECOND_VALUE]
+
+        result.append(
+            (f"Property '{path}' was updated. "
+                f"From {format_value(first_value)} "
+                f"to {format_value(second_value)}")
+        )
     elif status == NESTED:
+        children = node[CHILDREN]
         path += DOT
-        return format_plain(node[CHILDREN], path)
+
+        for key, value in children.items():
+            result.append(get_formated_str(value, key, path))
+
+    return LINE_BREAK.join(result)
 
 
-def format_plain(diff, path=''):
+def format_plain(diff):
+    path = ''
     result = []
 
     keys = diff.keys()
     for key in keys:
         node = diff[key]
 
-        str = get_formated_str(node, key, path)
-        if str:
-            result.append(str)
+        formated_str = get_formated_str(node, key, path)
+        if formated_str:
+            result.append(formated_str)
 
-    return LINE_BREAK.join(result)
+    return LINE_BREAK.join(result).replace("\n\n", "\n")
