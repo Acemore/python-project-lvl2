@@ -14,7 +14,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: Install depenpencies
-        run: 
+        run: |
           pip install poetry
           pip install flake8
           pip install pytest
@@ -29,7 +29,7 @@ jobs:
       - name: Test & publish code coverage
         uses: paambaati/codeclimate-action@v2.7.5
         env:
-          CC_TEST_REPORTER_ID: ac67632c32e62c0b31e6863520c469cc3a8a1487be0b914c527a05a6ddb3ab8d
+          CC_TEST_REPORTER_ID: a0e050a9c77c2d4c97d512290ed091d95565cc1c84391725a38a325a063e4d2c
         with:
           coverageCommand: make test-coverage
           debug: true
